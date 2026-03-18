@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Моделювання руху точки</title>
+        <link href="style.css" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <h2>Моделювання руху точки під кутом</h2>
+
+        <div class="top-container">
+            <div class="controls">
+                <label for="x0">x0:</label>
+                <input id="x0" type="number" value="10">
+                <label for="y0">y0:</label>
+                <input id="y0" type="number" value="10"><br>
+                <label for="angle">Кут (°):</label>
+                <input id="angle" type="number" value="60">
+                <label for="v0">v0:</label>
+                <input id="v0" type="number" value="70">
+                <label for="a">a:</label>
+                <input id="a" type="number" value="5"><br>
+                <label for="point-color">Колір точки:</label>
+                <input id="point-color" type="color" value="#ff0000">
+
+                <button onclick="startSimulation()">Старт</button>
+                <button onclick="clearCanvas()">Очистити</button>
+            </div>
+            <div id="info">
+                <div id="info-x">x: 0</div>
+                <div id="info-y">y: 0</div>
+                <div id="info-vx">vx: 0</div>
+                <div id="info-vy">vy: 0</div>
+            </div>
+        </div>
+
+        <canvas id="canvas"></canvas>
+
+
+        <script src="script.js"></script>
+    </body>
+
+</html>
