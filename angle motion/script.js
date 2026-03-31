@@ -9,8 +9,11 @@ ctx.scale(1, -1);
 let x0, y0, x, y, v0, angle, rad, a;
 let v0x, v0y, ax, ay, vx, vy;
 let g = 9.8; // прискорення вільного падіння
+
 let t = 0;
-let dt = 1 / 20; // fps
+let lastTime = 1;
+let timeScale = 10;
+
 let color;
 
 let points = [];
@@ -21,7 +24,7 @@ function drawGrid() {
   scaleFactor = parseFloat(document.getElementById("scale").value);
 
   const step = scaleFactor * 10;
-
+  let value
   ctx.save();
   ctx.strokeStyle = "#f0a500";
   ctx.lineWidth = 1;
@@ -36,7 +39,7 @@ function drawGrid() {
     ctx.scale(1, -1);
 
     ctx.fillStyle = "#f0a500";
-    let value = (y / scaleFactor);
+    value = (y / scaleFactor);
     ctx.fillText((value).toFixed(0), 2, -y - 2);
 
     ctx.restore();
@@ -52,7 +55,7 @@ function drawGrid() {
     ctx.scale(1, -1);
 
     ctx.fillStyle = "#f0a500";
-    let value = (x / scaleFactor);
+    value = (x / scaleFactor);
     ctx.fillText((value).toFixed(0), x + 2, -2);
 
     ctx.restore();
@@ -62,7 +65,7 @@ function drawGrid() {
 }
 
 function startSimulation() {
-
+  points = [];
   x0 = parseFloat(document.getElementById("x0").value);
   y0 = parseFloat(document.getElementById("y0").value);
   v0 = parseFloat(document.getElementById("v0").value);
@@ -81,16 +84,17 @@ function startSimulation() {
   ay = -g;
 
   t = 0;
+  lastTime = 0;
 
   let t_total = (2 * v0y) / g;
-  let maxHeight = (v0y * v0y) / (2 * g);
-  let distance = v0x * t_total + (ax * t_total * t_total) / 2;
+  let maxHeight = y0 + (v0y * v0y) / (2 * g);
+  let distance = x0 + v0x * t_total + (ax * t_total * t_total) / 2;
 
   document.getElementById("info-t").textContent = `t: ${t_total.toFixed(2)}`;
   document.getElementById("info-l").textContent = `l: ${distance.toFixed(2)}`;
   document.getElementById("info-h").textContent = `h: ${maxHeight.toFixed(2)}`;
 
-  animate();
+  requestAnimationFrame(animate);
 }
 
 
@@ -103,7 +107,11 @@ function drawPoint(x, y) {
   points.push({ x: x, y: y });
 }
 
-function animate() {
+function animate(timestamp) {
+  if (!lastTime) lastTime = timestamp;
+  let dt = (timestamp - lastTime) / 1000;
+  lastTime = timestamp;
+  t += dt * timeScale;
 
   x = x0 + v0x * t + (ax * t * t) / 2;
   y = y0 + v0y * t + (ay * t * t) / 2;
@@ -117,14 +125,14 @@ function animate() {
   document.getElementById("info-vx").textContent = `vx: ${vx.toFixed(2)}`;
   document.getElementById("info-vy").textContent = `vy: ${vy.toFixed(2)}`;
 
-  t += dt;
-
   if (y >= 0) {
+    console.log(timestamp);
     requestAnimationFrame(animate);
   }
 }
 
 function clearCanvas() {
+  points = [];
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawGrid();
   document.getElementById("info-x").textContent = `x: 0`;
@@ -146,7 +154,6 @@ canvas.addEventListener("mousemove", function (event) {
 
   let foundPoint = null;
 
-
   for (let p of points) {
 
     if (Math.abs(mouseX - p.x) < scaleFactor && Math.abs(mouseY - p.y) < scaleFactor) {
@@ -159,7 +166,7 @@ canvas.addEventListener("mousemove", function (event) {
     tooltip.style.display = "block";
     tooltip.style.left = event.clientX + 10 + "px";
     tooltip.style.top = event.clientY + 10 + "px";
-    tooltip.innerText = `x: ${foundPoint.x}, y: ${foundPoint.y}`;
+    tooltip.innerText = `x: ${foundPoint.x.toFixed(2)}, y: ${foundPoint.y.toFixed(2)}`;
   } else {
     tooltip.style.display = "none";
   }
