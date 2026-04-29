@@ -289,3 +289,87 @@ button:active {
 .overflow-x-auto {
     overflow-x: auto;
 }
+
+.greedy-table {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 13px;
+    border-collapse: collapse;
+}
+
+.greedy-table th {
+    padding: 12px 8px;
+    font-weight: bold;
+    color: #f0a500;
+    background: #444444;
+    border: 1px solid #555555;
+}
+
+.greedy-table td {
+    padding: 8px;
+    border: 1px solid #555555;
+}
+
+.greedy-table .take-row {
+    background: rgb(76 175 80 / 10%);
+}
+
+.greedy-table .reject-row {
+    background: rgb(255 107 107 / 5%);
+}
+
+.greedy-table .decision-take {
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.greedy-table .decision-reject {
+    color: #ff6b6b;
+}
+
+.sorting-table {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+.sorting-table th {
+    padding: 8px;
+    color: #f0a500;
+    background: #555555;
+    border: 1px solid #666666;
+}
+
+.sorting-table td {
+    padding: 6px;
+    text-align: center;
+    border: 1px solid #666666;
+}
+
+.sorting-table .ratio-value {
+    font-weight: bold;
+    color: #f0a500;
+}
+
+.summary-table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+.summary-table td {
+    padding: 8px;
+    border-bottom: 1px solid #444444;
+}
+
+.summary-table td:first-child {
+    width: 60%;
+    font-weight: bold;
+}
+
+.summary-table .total-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #f0a500;
+}
