@@ -140,3 +140,31 @@ button:active {
     overflow-y: visible;
     text-align: left;
 }
+
+.combinations-table {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 13px;
+    border-collapse: collapse;
+}
+
+.combinations-table th {
+    padding: 12px 8px;
+    font-weight: bold;
+    color: #f0a500;
+    background: #444444;
+    border: 1px solid #555555;
+}
+
+.combinations-table td {
+    padding: 8px;
+    border: 1px solid #555555;
+}
+
+.combinations-container {
+    max-height: 500px;
+    margin-top: 15px;
+    overflow-y: auto;
+    background: #1e1e1e;
+    border-radius: 8px;
+}
