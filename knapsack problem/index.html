@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Задача рюкзака</title>
+        <link href="style.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <h2>Задача рюкзака</h2>
+
+        <div class="top-container">
+            <div class="controls">
+                <h3>Налаштування</h3>
+                <div>
+                    <label for="capacity">Місткість рюкзака: </label>
+                    <input id="capacity" type="number" value="30" min="10">
+                </div>
+                <div>
+                    <label for="inputMode">Режим введення: </label>
+                    <select id="inputMode"
+                        style="background: #333; color: white; padding: 5px; border-radius: 6px; width: auto;">
+                        <option value="auto">Автоматична генерація</option>
+                        <option value="manual">Ручне введення</option>
+                    </select>
+                </div>
+                <div id="autoControls">
+                    <label for="itemCount">Кількість предметів: </label>
+                    <input id="itemCount" type="number" value="5" min="1" max="8">
+                    <button id="generateBtn">Згенерувати предмети</button>
+                </div>
+                <div id="manualControls" style="display: none;">
+                    <button id="addItemBtn">+ Додати предмет</button>
+                    <button id="clearItemsBtn">Очистити всі</button>
+                </div>
+            </div>
+
+            <div class="controls">
+                <h3>Предмети (Вага, Цінність)</h3>
+                <div id="itemsList">
+                    <p>Натисніть "Згенерувати" або додайте предмети вручну</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls" style="margin: 20px auto; width: fit-content;">
+            <h3>Методи розв'язання</h3>
+            <button id="bruteForceBtn">1. Повний перебір</button>
+            <button id="dynamicBtn">2. Динамічне програмування</button>
+            <button id="greedyBtn">3. Жадібний метод</button>
+            <button id="recursiveBtn">4. Рекурсивний метод</button>
+            <button id="branchBoundBtn">5. Гілки та межі</button>
+
+        </div>
+
+        <div class="controls" style="margin: 20px auto; width: 95%;">
+            <h3>Результат</h3>
+            <div id="result">
+                <p>Виберіть метод для розв'язання</p>
+            </div>
+        </div>
+
+        <script src="js/main.js"></script>
+        <script src="js/bruteForce.js"></script>
+        <script src="js/dynamic.js"></script>
+        <script src="js/greedy.js"></script>
+        <script src="js/branchBound.js"></script>
+        <script src="js/recursive.js"></script>
+    </body>
+
+</html>
