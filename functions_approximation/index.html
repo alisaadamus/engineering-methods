@@ -50,6 +50,8 @@
 
     <body>
         <div class="container">
+            <h1>Інтерполяція + МНК (Plotly.js)</h1>
+
             <div class="controls">
                 <button class="dataset-btn" onclick="loadDataset(0)">5 точок</button>
                 <button class="dataset-btn" onclick="loadDataset(1)">10 точок</button>
@@ -80,6 +82,17 @@
                 <label><input type="checkbox" id="show-interp" checked onchange="updatePlots()"> Показати
                     інтерполяцію</label>
                 <label><input type="checkbox" id="show-ls" checked onchange="updatePlots()"> Показати МНК</label>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                <div>
+                    <h2>Графік апроксимації</h2>
+                    <div id="main-plot" style="width:100%; height:520px;"></div>
+                </div>
+                <div>
+                    <h2>Діаграма залишків</h2>
+                    <div id="residual-plot" style="width:100%; height:520px;"></div>
+                </div>
             </div>
         </div>
 
@@ -153,6 +166,89 @@
             }
 
             function setActive(i) { activeIndex = i; renderPointsList(); updatePlots(); }
+
+            // ==================== МАТЕМАТИКА ====================
+
+            function lagrange(x, xs, ys) {
+                let sum = 0;
+                for (let i = 0; i < xs.length; i++) {
+                    let prod = ys[i];
+                    for (let j = 0; j < xs.length; j++) {
+                        if (i !== j) prod *= (x - xs[j]) / (xs[i] - xs[j]);
+                    }
+                    sum += prod;
+                }
+                return sum;
+            }
+
+            function dividedDifferences(xs, ys) {
+                const n = xs.length;
+                let dd = ys.slice();
+                const coeffs = [dd[0]];
+                for (let j = 1; j < n; j++) {
+                    for (let i = n - 1; i >= j; i--) {
+                        dd[i] = (dd[i] - dd[i - 1]) / (xs[i] - xs[i - j]);
+                    }
+                    coeffs.push(dd[j]);
+                }
+                return coeffs;
+            }
+
+            function newtonEval(x, xs, coeffs) {
+                let sum = coeffs[0];
+                let prod = 1;
+                for (let i = 1; i < coeffs.length; i++) {
+                    prod *= (x - xs[i - 1]);
+                    sum += coeffs[i] * prod;
+                }
+                return sum;
+            }
+
+            // ==================== ГРАФІКИ ====================
+            let mainPlot, residualPlot;
+
+            function updatePlots() {
+                if (currentPoints.length < 2) {
+                    console.log("Потрібно мінімум 2 точки");
+                    return;
+                }
+
+                const xs = currentPoints.map(p => p.x);
+                const ys = currentPoints.map(p => p.y);
+                const xMin = Math.min(...xs) - 1;
+                const xMax = Math.max(...xs) + 1;
+                const xDense = Array.from({ length: 400 }, (_, i) => xMin + i * (xMax - xMin) / 399);
+
+                const method = document.getElementById('interp-method').value;
+                const m = parseInt(document.getElementById('degree').value);
+
+                // Інтерполяція
+                let yInterp = [];
+                if (method === 'lagrange') {
+                    yInterp = xDense.map(x => lagrange(x, xs, ys));
+                } else {
+                    const coeffs = dividedDifferences(xs, ys);
+                    yInterp = xDense.map(x => newtonEval(x, xs, coeffs));
+                }
+
+                const traces = [
+                    { x: xs, y: ys, mode: 'markers', name: 'Дані', marker: { size: 11, color: '#1f77b4' } }
+                ];
+
+                if (document.getElementById('show-interp').checked) {
+                    traces.push({ x: xDense, y: yInterp, mode: 'lines', name: 'Інтерполяція', line: { color: 'red', width: 3 } });
+                }
+                if (activeIndex >= 0) {
+                    traces.push({
+                        x: [xs[activeIndex]], y: [ys[activeIndex]],
+                        mode: 'markers', name: 'Активна точка',
+                        marker: { size: 16, color: 'yellow', line: { color: 'black', width: 3 } }
+                    });
+                }
+
+                Plotly.react('main-plot', traces, { title: 'Інтерполяція', legend: { orientation: 'h' } });
+
+            }
 
             // Запуск
             loadDataset(0);
