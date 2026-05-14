@@ -327,6 +327,22 @@
                 }
 
                 Plotly.react('main-plot', traces, { title: 'Інтерполяція та МНК', legend: { orientation: 'h' } });
+
+                // Залишки
+                const yPred = xs.map(x => {
+                    let val = 0, px = 1;
+                    for (let c of lsCoeffs) { val += c * px; px *= x; }
+                    return val;
+                });
+                const residuals = ys.map((y, i) => y - yPred[i]);
+
+                Plotly.react('residual-plot', [{
+                    x: xs, y: residuals, mode: 'markers+lines',
+                    name: 'Залишки', marker: { color: 'purple' }
+                }], {
+                    title: 'Залишки МНК',
+                    shapes: [{ type: 'line', x0: xMin, x1: xMax, y0: 0, y1: 0, line: { color: '#444', dash: 'dash' } }]
+                });
             }
 
             // Запуск
